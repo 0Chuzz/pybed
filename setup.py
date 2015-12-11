@@ -3,7 +3,10 @@
 from distutils.core import setup, Extension
 
 module1 = Extension('bed',
-                    sources = ['src/bed_.c'])
+                    sources = ['src/bed_.c'],
+                    libraries=["bed", "util"],
+                    include_dirs=["bed-2.5/libbed","bed-2.5/libutil"],
+                    library_dirs=["bed-2.5/lib"])
 
 setup (name = 'PackageName',
        version = '1.0',

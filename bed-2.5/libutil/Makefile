@@ -21,7 +21,7 @@ LIBDIR		= ../lib
 TARGET		= $(LIBDIR)/libutil.a
 INCLUDE		= -I.
 
-CFLAGS		= $(CDEBUG) $(INCLUDE) $(DEFS) $(OPTIMIZE)
+CFLAGS		= -fPIC $(CDEBUG) $(INCLUDE) $(DEFS) $(OPTIMIZE)
 CPPFLAGS	= $(INCLUDE) 
 
 obj/%.o : %.c	;	@echo Compiling $(notdir $<)

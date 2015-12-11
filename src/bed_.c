@@ -1,28 +1,30 @@
 #include <Python.h>
-#include <stdlib.h>
+#include <bed.h>
+
 
 
 
 static PyObject *
-spam_system(PyObject *self, PyObject *args)
+pybed_init(PyObject *self, PyObject *args)
 {
-    const char *command;
+    unsigned long n, c;
     int sts;
 
-    if (!PyArg_ParseTuple(args, "s", &command))
-        return NULL;
-    sts = system(command);
-    return Py_BuildValue("i", sts);
-}
-static PyMethodDef SpamMethods[] = {
 
-    {"system",  spam_system, METH_VARARGS,
-     "Execute a shell command."},
+    if (!PyArg_ParseTuple(args, "uu", &n, &c))
+        return NULL;
+    bed_init(n,c);
+    return Py_None;
+}
+static PyMethodDef pyBedMethods[] = {
+
+    {"init",  pybed_init, METH_VARARGS,
+     "bed_init"},
     {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
 PyMODINIT_FUNC
 initbed(void)
 {
-    (void) Py_InitModule("bed", SpamMethods);
+    (void) Py_InitModule("bed", pyBedMethods);
 }
