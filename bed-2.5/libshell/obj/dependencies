@@ -1,0 +1,10 @@
+shell.o: shell.c shell.h ../libbed/bed.h ../libutil/bool.h \
+ ../libutil/ilist.h ../libutil/Malloc.h ../libutil/bool.h \
+ ../libutil/lex.h help.h ../libutil/getline.h ../libutil/timer.h \
+ ../libutil/getruntime.h ../libutil/darray.h ../libutil/hash.h \
+ ../libutil/cb.h version.h ../libutil/Malloc.h ../libbed/bedio.h \
+ ../libbed/bed.h ../libbed/bedfsm.h ../libbed/kernel.h ../libbed/op.h \
+ ../libutil/istack.h ../libbed/ref.h ../libbed/upall.h ../libbed/kernel.h \
+ ../libbed/upone.h ../libbed/upsome.h ../libbed/replace.h \
+ ../libbed/simplify.h ../libbed/cache.h ../libbed/quant.h
+help.o: help.c help.h

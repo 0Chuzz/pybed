@@ -1,0 +1,45 @@
+
+Version 2.5
+-----------
+
+* FORALL is now treated as an operator and no longer as "NOT EXISTS
+  NOT".
+
+* Caches have been merged. Programmers can now use "cache.h" to cache
+  intermediate results.
+
+* C++ interface added.
+
+* BED_UPSOME added (a mix between UPALL and UPONE).
+
+* BED_SIMPLIFY added.
+
+* BED_QUANTDOWN added for scope reduction of quantifiers.
+
+* Another external gc hook added.
+
+* "writeorder" in the shell now outputs the current variable ordering
+  to a file. It can be read using "source".
+
+* "fanin" and "fanout" added as variable ordering methods.
+
+* Root lists can now be specified explicitly "[R1 R2 R3]", by prefix
+  "R*", or all roots at once "*".
+
+* "roots" / "outputs" / "lets" commands now take a root list as an
+  optional argument.
+
+* "foreach" shell command added. Cycle through all roots:
+
+  > foreach root do "echo root"
+
+  Cycle through selected roots:
+
+  > foreach root in R* do "echo root"
+
+* "depth" shell command add.
+
+* Fixed bug in data structure used for GC.
+
+* "bedsat" command added for satisfiability checking. ("bedsat"
+  searches for 1, "bedunsat" searches for 0.)

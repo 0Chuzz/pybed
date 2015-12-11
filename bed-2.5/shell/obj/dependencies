@@ -1,0 +1,4 @@
+main.o: main.c main.h ../libshell/shell.h ../libbed/bed.h \
+ ../libutil/bool.h ../libutil/ilist.h ../libutil/Malloc.h \
+ ../libutil/bool.h ../libutil/lex.h version.h ../libutil/timer.h \
+ ../libutil/getruntime.h

@@ -1,0 +1,11 @@
+Malloc.o: Malloc.c Malloc.h
+darray.o: darray.c darray.h Malloc.h bool.h
+getruntime.o: getruntime.c
+ilist.o: ilist.c ilist.h Malloc.h bool.h
+list.o: list.c list.h Malloc.h bool.h
+cb.o: cb.c cb.h Malloc.h
+getline.o: getline.c getline.h
+hash.o: hash.c hash.h Malloc.h bool.h cb.h
+lex.o: lex.c lex.h bool.h Malloc.h
+timer.o: timer.c timer.h getruntime.h
+istack.o: istack.c istack.h Malloc.h bool.h

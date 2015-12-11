@@ -1,0 +1,49 @@
+prime.o: prime.c ../libutil/bool.h
+tables.o: tables.c tables.h op.h ../libutil/bool.h bed.h \
+ ../libutil/ilist.h ../libutil/Malloc.h ../libutil/bool.h kernel.h \
+ ../libutil/istack.h ref.h
+upone.o: upone.c upone.h kernel.h bed.h ../libutil/bool.h \
+ ../libutil/ilist.h ../libutil/Malloc.h ../libutil/bool.h op.h \
+ ../libutil/istack.h ref.h upall.h ../libutil/Malloc.h cache.h
+bed.o: bed.c bed.h ../libutil/bool.h ../libutil/ilist.h \
+ ../libutil/Malloc.h ../libutil/bool.h kernel.h op.h ../libutil/istack.h \
+ ref.h upall.h upone.h upsome.h sat.h restrict.h simplify.h cache.h \
+ quant.h
+op.o: op.c op.h ../libutil/bool.h bed.h ../libutil/ilist.h \
+ ../libutil/Malloc.h ../libutil/bool.h kernel.h ../libutil/istack.h ref.h
+sat.o: sat.c sat.h bed.h ../libutil/bool.h ../libutil/ilist.h \
+ ../libutil/Malloc.h ../libutil/bool.h kernel.h op.h ../libutil/istack.h \
+ ref.h
+bedfsm.o: bedfsm.c bedfsm.h bed.h ../libutil/bool.h ../libutil/ilist.h \
+ ../libutil/Malloc.h ../libutil/bool.h kernel.h op.h ../libutil/istack.h \
+ ref.h
+replace.o: replace.c replace.h kernel.h bed.h ../libutil/bool.h \
+ ../libutil/ilist.h ../libutil/Malloc.h ../libutil/bool.h op.h \
+ ../libutil/istack.h ref.h tables.h
+upall.o: upall.c upall.h kernel.h bed.h ../libutil/bool.h \
+ ../libutil/ilist.h ../libutil/Malloc.h ../libutil/bool.h op.h \
+ ../libutil/istack.h ref.h ../libutil/Malloc.h cache.h
+kernel.o: kernel.c kernel.h bed.h ../libutil/bool.h ../libutil/ilist.h \
+ ../libutil/Malloc.h ../libutil/bool.h op.h ../libutil/istack.h ref.h \
+ ../libutil/timer.h ../libutil/getruntime.h restrict.h replace.h upall.h \
+ upone.h cache.h
+ref.o: ref.c ref.h
+bedio.o: bedio.c bedio.h bed.h ../libutil/bool.h ../libutil/ilist.h \
+ ../libutil/Malloc.h ../libutil/bool.h kernel.h op.h ../libutil/istack.h \
+ ref.h ../libutil/lex.h ../libutil/cb.h ../libutil/hash.h ../libutil/cb.h \
+ ../libutil/Malloc.h
+restrict.o: restrict.c restrict.h bed.h ../libutil/bool.h \
+ ../libutil/ilist.h ../libutil/Malloc.h ../libutil/bool.h cache.h \
+ kernel.h op.h ../libutil/istack.h ref.h
+simplify.o: simplify.c bed.h ../libutil/bool.h ../libutil/ilist.h \
+ ../libutil/Malloc.h ../libutil/bool.h kernel.h op.h ../libutil/istack.h \
+ ref.h upone.h cache.h ../libutil/lex.h ../libutil/Malloc.h
+cache.o: cache.c cache.h ../libutil/bool.h prime.h ../libutil/Malloc.h
+quant.o: quant.c quant.h bed.h ../libutil/bool.h ../libutil/ilist.h \
+ ../libutil/Malloc.h ../libutil/bool.h cache.h kernel.h op.h \
+ ../libutil/istack.h ref.h
+upsome.o: upsome.c upsome.h kernel.h bed.h ../libutil/bool.h \
+ ../libutil/ilist.h ../libutil/Malloc.h ../libutil/bool.h op.h \
+ ../libutil/istack.h ref.h ../libutil/Malloc.h cache.h
+bedcpp.o: bedcpp.cpp bed.h ../libutil/bool.h ../libutil/ilist.h \
+ ../libutil/Malloc.h ../libutil/bool.h

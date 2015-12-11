@@ -1,0 +1,92 @@
+
+Boolean Expression Diagram (BED) Package
+========================================
+
+
+Copyright & License
+-------------------
+
+Copyright (c) 1996 - 2000 Technical University of Denmark
+Copyright (c) 1999 - 2000 IT University of Copenhagen
+
+by Poul Frederick Williams, Henrik Hulgaard, and Henrik Reif Andersen
+Email: {pfw,henrik,hra}@it-c.dk
+
+This is LGPL'ed (Library General Public License) software -- see the
+BED_LICENSE file for details.
+
+
+About
+-----
+
+This package is an implementation of the Boolean Expression Diagrams
+data structure and algorithms. It provides a C library (with both C
+and C++ interfaces) as well as a simple shell-like program for
+experimenting with BEDs.
+
+The BED webpage contains more information:
+
+	http://www.it-c.dk/research/bed/
+
+
+Contents
+--------
+
+This distribution contains five sub-directories:
+
+libutil	Library containing a number of utilities used by the BED library
+libbed	Library containing the core BED data structure and algorithms
+	for manipulating this data structure. 
+libshell and
+shell	implements a user shell on top of the BED library. Commands to
+	build, manipulate, inspect and view BED can be issued at a
+	prompt.
+doc	Contains documentation on how to use the BED shell and how to use
+	the libraries. At the moment the documentation is rather limited.
+
+
+Two extra directories will be created during the installation:
+
+bin	contains the binaries.
+lib	contains the libraries.
+
+
+Installation
+------------
+
+To build the BED package, do the following in this directory:
+
+	gmake depend
+	gmake
+
+If the make process fails, you may have to modify the top portion of
+the Makefile in the top directory. If the process succeeds, the
+program 'bed' is built in the directory './bin'. If you don't have
+gcc, any other ANSI cc compiler should do, although you will probably
+need to modify the Makefiles slightly.
+
+To display the BEDs, you will need the 'dot' program which can be
+obtained from AT&T:
+
+	http://www.research.att.com/sw/tools/graphviz
+
+BED also expects to find 'ghostview' on your system.
+
+The BED package has been successfully compiled on the following systems:
+
+	Sun Sparc 4, SunOS 4.1.4 with gcc 2.7.2.
+	Pentium PC running Linux with gcc 2.8.1 and 2.91.66.
+	DEC Alpha, OSF 1 V4.0 with gcc 2.8.1.
+
+
+Comments or bug reports
+-----------------------
+
+If you have trouble compiling the BED program or if you have bug
+reports, fixes, or enhancements, send e-mail to one of the authors:
+
+Henrik Hulgaard          --  henrik@it-c.dk	(preferred)
+Poul Frederick Williams  --  pfw@it-c.dk
+Henrik Reif Andersen     --  hra@it-c.dk
+
+October 9, 2000
