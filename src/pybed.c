@@ -20,28 +20,12 @@ static PyObject* Node_new (PyTypeObject * type, PyObject* args, PyObject *kwds)
 }
 
 static PyTypeObject bed_nodeType = {
-        PyObject_HEAD_INIT(NULL)
-        0,                     /*ob_size*/
-        "bed.Node",         /*tp_name*/
-        sizeof(bed_nodeObject), /*tp_basicsize*/
-        0,                     /*tp_itemsize*/
-        0,                     /*tp_dealloc*/
-        0,                     /*tp_print*/
-        0,                     /*tp_getattr*/
-        0,                     /*tp_setattr*/
-        0,                     /*tp_compare*/
-        0,                     /*tp_repr*/
-        0,                     /*tp_as_number*/
-        0,                     /*tp_as_sequence*/
-        0,                     /*tp_as_mapping*/
-        0,                     /*tp_hash */
-        0,                     /*tp_call*/
-        0,                     /*tp_str*/
-        0,                     /*tp_getattro*/
-        0,                     /*tp_setattro*/
-        0,                     /*tp_as_buffer*/
-        Py_TPFLAGS_DEFAULT,    /*tp_flags*/
-        "bed_node objects",       /* tp_doc */
+        PyObject_HEAD_INIT(&PyType_Type)
+        .tp_name = "bed.Node",         /*tp_name*/
+        .tp_basicsize = sizeof(bed_nodeObject), /*tp_basicsize*/
+        .tp_flags = Py_TPFLAGS_DEFAULT,    /*tp_flags*/
+        .tp_doc = "bed_node objects",       /* tp_doc */
+        .tp_new = Node_new
 };
 
 typedef struct {
@@ -65,11 +49,11 @@ static PyObject* Var_new (PyTypeObject * type, PyObject* args, PyObject *kwds)
 }
 
 static PyTypeObject bed_varType = {
-        PyObject_HEAD_INIT(NULL)
+        PyObject_HEAD_INIT(&PyType_Type)
         .tp_name = "bed.Var",         /*tp_name*/
         .tp_basicsize = sizeof(bed_varObject), /*tp_basicsize*/
         .tp_doc = "bed_var object",
-        .tp_new = Node_new,
+        .tp_new = Var_new,
 };
 
 
@@ -103,7 +87,11 @@ static PyMethodDef pyBedMethods[] = {
 PyMODINIT_FUNC
 initbed(void)
 {
-        bed_init(10*1024*1024,5*1024*1024);
+        if (PyType_Ready(&bed_nodeType) < 0) return;
+        if (PyType_Ready(&bed_varType) < 0) return;
+
+
+        bed_init(10*1024,5*1024);
 
         PyObject *module = Py_InitModule("bed", pyBedMethods);
         Py_INCREF(&bed_nodeType);
