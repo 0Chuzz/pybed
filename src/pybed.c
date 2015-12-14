@@ -17,7 +17,7 @@ static void Node_dealloc(bed_nodeObject *self)
 
 static PyTypeObject bed_nodeType = {
     PyObject_HEAD_INIT(&PyType_Type)
-    .tp_name = "bed.Node",                 /*tp_name*/
+    .tp_name = "bedbindings.Node",                 /*tp_name*/
     .tp_basicsize = sizeof(bed_nodeObject),         /*tp_basicsize*/
     .tp_flags = Py_TPFLAGS_DEFAULT,            /*tp_flags*/
     .tp_doc = "bed_node objects",               /* tp_doc */
@@ -45,7 +45,7 @@ static PyObject* Var_new (PyTypeObject * type, PyObject* args, PyObject *kwds)
 
 static PyTypeObject bed_varType = {
     PyObject_HEAD_INIT(&PyType_Type)
-    .tp_name = "bed.Var",                 /*tp_name*/
+    .tp_name = "bedbindings.Var",                 /*tp_name*/
     .tp_basicsize = sizeof(bed_varObject),         /*tp_basicsize*/
     .tp_doc = "bed_var object",
     .tp_new = Var_new,
@@ -54,25 +54,26 @@ static PyTypeObject bed_varType = {
 
 
 static PyObject *
-pybed_not(PyObject *self, PyObject *args)
+pybed_mk_op(PyObject *self, PyObject *args)
 {
-    bed_nodeObject *base,*ret;
-    int sts;
+    bed_nodeObject *base1, *base2,*ret;
+    int op;
 
-    if (!PyArg_ParseTuple(args, "O!", &bed_nodeType, &base))
+    if (!PyArg_ParseTuple(args, "iO!O!", &op, &bed_nodeType, &base1, &bed_nodeType, &base2))
         return NULL;
 
     ret = bed_nodeType.tp_new(&bed_nodeType, Py_None, Py_None);
     if (ret == NULL) return NULL;
-    ret->node = bed_mk_not(base->node);
-    ret->lowRef = base;
-    ret->hiRef = NULL;
-    Py_INCREF(base);
+    ret->node = bed_ref(bed_mk_op(op,base1->node, base2->node));
+    ret->lowRef = base1;
+    ret->hiRef = base2;
+    Py_INCREF(base1);
+    Py_INCREF(base2);
     return ret;
 }
 
 static PyObject *
-pybed_var(PyObject *self, PyObject *args)
+pybed_mk_var(PyObject *self, PyObject *args)
 {
     bed_nodeObject *ret;
     bed_varObject *base;
@@ -83,7 +84,7 @@ pybed_var(PyObject *self, PyObject *args)
 
     ret = bed_nodeType.tp_new(&bed_nodeType, Py_None, Py_None);
     if (ret == NULL) return NULL;
-    ret->node = bed_mk_var(base->var, bed_false, bed_true);
+    ret->node = bed_ref(bed_mk_var(base->var, bed_false, bed_true));
     ret->lowRef = (PyObject *) base;
     ret->hiRef = NULL;
     Py_INCREF(base);
@@ -92,16 +93,16 @@ pybed_var(PyObject *self, PyObject *args)
 
 static PyMethodDef pyBedMethods[] = {
 
-    {"not_",  pybed_not, METH_VARARGS,
-     "not node"},
-    {"var",  pybed_var, METH_VARARGS,
-      "var node"},
+    {"mk_op",  pybed_mk_op, METH_VARARGS,
+     "generic operation node"},
+    {"mk_var",  pybed_mk_var, METH_VARARGS,
+      "variable node"},
     {NULL, NULL, 0, NULL}            /* Sentinel */
 };
 
 
 PyMODINIT_FUNC
-initbed(void)
+initbedbindings(void)
 {
     if (PyType_Ready(&bed_nodeType) < 0) return;
     if (PyType_Ready(&bed_varType) < 0) return;
@@ -109,7 +110,7 @@ initbed(void)
 
     bed_init(10*1024,5*1024);
 
-    PyObject *module = Py_InitModule("bed", pyBedMethods);
+    PyObject *module = Py_InitModule("bedbindings", pyBedMethods);
     Py_INCREF(&bed_nodeType);
     PyModule_AddObject(module, "Node", &bed_nodeType);
     Py_INCREF(&bed_varType);
