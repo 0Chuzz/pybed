@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 1996 - 2000 Technical University of Denmark
  *  Copyright (c) 1999 - 2000 IT University of Copenhagen
  *
@@ -6,7 +6,7 @@
  * IT University of Copenhagen
  * Glentevej 67
  * DK-2400 Copenhagen NV, Denmark
- * 
+ *
  * e-mail: {pfw,henrik,hra}@it-c.dk
  */
 
@@ -24,11 +24,13 @@
 #endif
 
 
-static char *cpp_paths[] = 
+static char *cpp_paths[] =
 {
   "/usr/lib/cpp",
-  "/lib/cpp", 
+  "/lib/cpp",
   "/usr/ccs/lib/cpp",
+  "/bin/cpp",
+  "/usr/bin/cpp",
 #ifdef CPP_PATH
   CPP_PATH,
 #endif
@@ -36,17 +38,17 @@ static char *cpp_paths[] =
 };
 
 inline int get_lineno( Lex *l ) {
-  return l->last_line;	
+  return l->last_line;
 }
 
 inline char* get_name( Lex *l )
 {
-  return l->last_name;	
+  return l->last_name;
 }
 
 inline int get_int( Lex *l )
 {
-  return l->last_int; 	
+  return l->last_int;
 }
 
 inline double get_real( Lex *l )
@@ -136,7 +138,7 @@ char *lex_token_to_string( Token t)
     } else {
       return "bad";
     }
-  } 
+  }
 }
 
 
@@ -150,7 +152,7 @@ char *errtype, *s, *a1, *a2, *a3, *a4;
 
   if ( l->input_from_file ) {
     if ( l->last_line != l->current_line && l->last_line )
-      fprintf( l->errstream, " (File '%s', between lines %d and %d)", 
+      fprintf( l->errstream, " (File '%s', between lines %d and %d)",
 	       l->filename, l->last_line, l->current_line );
     else
       fprintf( l->errstream, " (File '%s', Line %d)", l->filename, l->last_line );
@@ -197,9 +199,9 @@ char *s, *a1, *a2, *a3, *a4;
 void skip_white_spaces( Lex *l )
 {
   while ( isspace( *l->ptr )) {
-    if ( *l->ptr == '\n' ) 
+    if ( *l->ptr == '\n' )
       get_line( l );
-    else 
+    else
       l->ptr++;
   }
 
@@ -232,14 +234,14 @@ static void parse_cpp( Lex *l )
    */
 
   skip_white_spaces( l );
-  
-  { 
+
+  {
     char *q = l->filename;
     l->ptr++;	/* Skip first '"' */
 
     while ( *l->ptr != '"' && !isspace(*l->ptr) )
       *q++ = *l->ptr++;
-    
+
     *q = EOL;
   }
 
@@ -250,12 +252,12 @@ static void parse_cpp( Lex *l )
   get_line( l );
 }
 
-void get_line( Lex *l ) 
+void get_line( Lex *l )
 {
   if ( l->input_from_file ) {
 
     if ( (l->ptr = fgets( l->buf, l->buf_len, l->infile ))) {
-      
+
       while ( strlen( l->buf ) == l->buf_len-1 ) {
 	/* Line was reached to the end of buffer */
 
@@ -271,12 +273,12 @@ void get_line( Lex *l )
 	(void) fgets( l->buf + l->buf_len - 1, l->buf_len + 1, l->infile );
 
 	l->buf_len *= 2;
-      } 
+      }
 
       l->current_line++;
 
-      if ( *l->ptr == '#' ) 
-	parse_cpp( l );    
+      if ( *l->ptr == '#' )
+	parse_cpp( l );
     } else {
       l->buf[0] = EOL;		/* Indicates EOF */
       l->ptr = l->buf;
@@ -318,13 +320,13 @@ static char *find_cpp( Lex *l )
 static int open_infile( Lex *l, char *filename )
 {
   char buf[80];
-  char *cpp_program = find_cpp( l ); 
+  char *cpp_program = find_cpp( l );
 
   l->infile = NULL;
   l->input_from_file = true;
 
   strcpy( l->filename, filename ? filename : "<stdin>" );
-    
+
   if ( cpp_program == NULL ) {
 
     l->infile = (filename ? fopen( filename, "r" ) : stdin );
@@ -335,8 +337,8 @@ static int open_infile( Lex *l, char *filename )
 
   } else if ( access( filename, R_OK ) == 0) {		/* Check file can be opened. */
     sprintf( buf, "%s -undef %s", cpp_program, filename );
-    l->infile = popen( buf, "r" );			/* Open file through cpp. */    
-  } 
+    l->infile = popen( buf, "r" );			/* Open file through cpp. */
+  }
 
   if ( l->infile == NULL) {
     lex_error( l, "Cannot open file '%s'", l->filename );
@@ -441,12 +443,12 @@ Token get_token( register Lex *l )
     *p = EOL;
     result = T_NAME;
 
-  } else if ( (current_char( l ) == '"') || 
+  } else if ( (current_char( l ) == '"') ||
 	      (current_char( l ) == '\'')) {
     /* T_STRING or T_NAME */
     char c = current_char( l );
     char *p = l->current_name;
-    
+
     next_char( l );
 
     while ( current_char( l ) != c ) {
@@ -499,13 +501,13 @@ Token get_token( register Lex *l )
 
       } else {	/* No period -- just an int */
 	result = T_INTEGER;
-      } 
+      }
 
     } else {		/* not l->flags & LEX_FLAGS_REALS */
 
       /* T_INTEGER */
       int radix = 10;
-      
+
       if ( l->flags & LEX_FLAGS_RADIX_CONSTANTS) {
 	if ( current_char( l ) == '0') {
 	  next_char( l );
@@ -528,9 +530,9 @@ Token get_token( register Lex *l )
 	  if ( isdigit( current_char( l )))
 	    l->current_int = l->current_int*radix + current_char( l ) - '0';
 	  else {
-	    if ( isupper( current_char( l ))) 
+	    if ( isupper( current_char( l )))
 	      current_char( l ) = tolower( current_char( l ));
-	    
+
 	    l->current_int = l->current_int*radix + current_char( l ) - 'a' + 10;
 	  }
 	}
@@ -588,7 +590,7 @@ Token get_token( register Lex *l )
 	} else {
 	  result = (Token) '.';
 	}
-	
+
       } else if ( '[' == current_char( l )) {
 	next_char( l );
 	if ( ']' == current_char( l )) {
@@ -606,7 +608,7 @@ Token get_token( register Lex *l )
 	} else {
 	  result = (Token) '-';
 	}
-	
+
       } else if ( '<' == current_char( l )) {
 	next_char( l );
 	if ( '=' == current_char( l )) {
@@ -634,7 +636,7 @@ Token get_token( register Lex *l )
 	} else {
 	  result = (Token) '>';
 	}
-	
+
       } else if ( '!' == current_char( l )) {
 	next_char( l );
 	if ( '=' == current_char( l )) {
@@ -655,7 +657,7 @@ Token get_token( register Lex *l )
 	} else {
 	  result = (Token) ':';
 	}
-	
+
       } else {
 	result = (Token) current_char( l );
 	next_char( l );
@@ -680,10 +682,10 @@ Token get_token( register Lex *l )
     case T_INTEGER:	fprintf( stderr, " (%d)", l->current_int );	break;
     case T_REAL:	fprintf( stderr, " %f", l->current_real );	break;
     default:		break;
-    } 
+    }
     (void) fprintf( stderr, "\n");
   }
-  
+
   return l->current_token=result;
 }
 
@@ -694,12 +696,12 @@ int mustbe( Lex *l, Token t)
   if (lex_ok(l) && !have( l, t) ) {
     strcpy( buf, lex_token_to_string( l->current_token ));
 
-    lex_syntax_error( l, "Token: Actual=%s, Expected=%s", 
+    lex_syntax_error( l, "Token: Actual=%s, Expected=%s",
 		      buf, lex_token_to_string( t ));
   }
 
   return l->err_no;
-}       
+}
 
 Boolean have( Lex *l, Token t)
 {
@@ -709,19 +711,19 @@ Boolean have( Lex *l, Token t)
   } else {
     return 0;
   }
-}       
+}
 
 Boolean lookahead( Lex *l, Token t )
 {
   return ( l->current_token == t);
-}       
+}
 
 int mustbe_keyword( Lex *l, char *s )
 {
   mustbe( l, T_NAME );
 
   if ( lex_ok(l) && !equal( l->last_name, s)) {
-    lex_syntax_error( l, "Actual token=%s, Expected keyword '%s'", 
+    lex_syntax_error( l, "Actual token=%s, Expected keyword '%s'",
 		      lex_token_to_string( l->current_token ), s );
   }
   return l->err_no;
@@ -741,5 +743,4 @@ Boolean have_keyword( Lex *l, char* s )
 Boolean lookahead_keyword( Lex *l, char* s )
 {
   return ( (l->current_token == T_NAME) && equal( l->current_name, s) );
-}       
-
+}
