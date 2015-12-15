@@ -4,6 +4,7 @@ mk_var = bedbindings.mk_var
 mk_op = bedbindings.mk_op
 Var = bedbindings.Var
 Node = bedbindings.Node
+read_file = bedbindings.read_file
 
 class Op:
       BED_NOP	= 0		# No ( binary Boolean ) operator */
